@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achados & Perdidos - Campus IFPR 🔍</title>
+  <!-- Fontes do Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #12131a 0%, #1a1c24 50%, #0f1015 100%);
+      color: #f3f4f6;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    .container { 
+      max-width: 680px; 
+      margin: 0 auto; 
+    }
+
+    /* Cabeçalho de Alerta */
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeIn 1s ease-out;
+    }
+
+    header .logo {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+      animation: pulse 2.5s infinite ease-in-out;
+    }
+
+    header h1 { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.8rem; 
+      font-weight: 800;
+      background: linear-gradient(90deg, #f59e0b 0%, #d97706 50%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.05em;
+      filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.2));
+    }
+
+    header p { 
+      color: #9ca3af; 
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    /* Cards com Glassmorphism e Tons de Âmbar */
+    .card {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .card h2 { 
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem; 
+      margin-bottom: 1.5rem; 
+      color: #f3f4f6;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Inputs Modernos */
+    input, textarea {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      color: white;
+      margin-bottom: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: #f59e0b;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+    }
+
+    textarea { 
+      resize: vertical; 
+      min-height: 90px; 
+    }
+
+    /* Botão Âmbar Alerta */
+    button {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #0f1015;
+      border: none;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button:hover { 
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* Avisos publicados (Quadro de Post-its virtuais) */
+    .message {
+      background: rgba(245, 158, 11, 0.01);
+      border-left: 4px solid #f59e0b;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 0 0.85rem 0.85rem 0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .message:hover {
+      background: rgba(245, 158, 11, 0.03);
+      border-left-color: #fbbf24;
+    }
+
+    .message .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+
+    .message .name { 
+      font-weight: 700; 
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.1);
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+
+    .message .time {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .message .text { 
+      color: #ffffff; 
+      font-size: 1.1rem; 
+      font-weight: 600;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .message .text::before {
+      content: '📢';
+      font-size: 0.95rem;
+      margin-top: 0.1rem;
+    }
+
+    /* Tags de IP (Redes) */
+    .ips { 
+      font-size: 0.75rem; 
+      color: #9ca3af; 
+      font-family: 'Space Grotesk', monospace; 
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      width: fit-content;
+    }
+
+    .ips span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .ips .ip-label { 
+      color: #6b7280; 
+      font-weight: 600;
+    }
+
+    .empty { 
+      color: #6b7280; 
+      text-align: center; 
+      padding: 2rem 0;
+      font-size: 1.1rem;
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="logo">🔍</span>
+      <h1>Achados & Perdidos</h1>
+      <p>Quadro de Avisos de Objetos do Campus IFPR</p>
+    </header>
+
+    <!-- Formulário de novo aviso -->
+    <div class="card" style="animation: fadeIn 0.8s ease-out;">
+      <h2><span>📝</span> Publicar um Aviso</h2>
+      <form action="/post" method="post">
+        <input type="text" name="name" placeholder="Seu Nome / Contato / Sala" required maxlength="100">
+        <textarea name="text" placeholder="Descreva o objeto e onde foi visto/perdido (ex: Encontrei estojo azul com canetas no Lab 2)" required></textarea>
+        <button type="submit">Publicar Aviso 📢</button>
+      </form>
+    </div>
+
+    <!-- Quadro de avisos cadastrados -->
+    <div class="card" style="animation: fadeIn 1s ease-out;">
+      <h2><span>📋</span> Avisos Ativos ({{ messages | length }})</h2>
+      {% if messages %}
+        {% for m in messages %}
+        <div class="message">
+          <div class="meta">
+            <span class="name">👤 {{ m.name }}</span>
+            <span class="time">⏱️ {{ m.created_at[:19].replace('T', ' ') }}</span>
+          </div>
+          
+          <div class="text">{{ m.text }}</div>
+
+          {% if m.ip_client or m.ip_origin %}
+          <div class="ips">
+            {% if m.ip_client %}
+              <span><span class="ip-label">origem (cliente):</span> {{ m.ip_client }}</span>
+            {% endif %}
+            {% if m.ip_origin %}
+              <span><span class="ip-label">roteamento (docker):</span> {{ m.ip_origin }}</span>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty">Nenhum aviso no quadro. Tudo em ordem! 🎒</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
